@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIMBEL CERDAS NTB - Portal Simulasi CAT</title>
+    <style>
+        /* RESET & BASE STYLES */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            color: #333333;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER HITAM & GOLD */
+        header {
+            background-color: #0d0d0d;
+            border-bottom: 4px solid #d4a017;
+            padding: 20px 5%;
+            color: #ffffff;
+        }
+        .header-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .brand-logo h1 {
+            font-size: 24px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 1px;
+        }
+        .brand-logo span {
+            color: #d4a017;
+        }
+        .brand-logo p {
+            font-size: 12px;
+            color: #cccccc;
+            margin-top: 3px;
+        }
+        .header-badge {
+            background-color: #1a1a1a;
+            border: 1px solid #d4a017;
+            color: #d4a017;
+            padding: 6px 14px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* CONTAINER MAIN */
+        main {
+            flex: 1;
+            max-width: 1100px;
+            width: 100%;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* TAB NAVIGATION */
+        .category-tabs {
+            display: flex;
+            gap: 8px;
+            border-bottom: 2px solid #e0e0e0;
+            margin-bottom: 25px;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding-bottom: 5px;
+        }
+        .tab-btn {
+            background-color: #ffffff;
+            border: 1px solid #dcdcdc;
+            padding: 10px 18px;
+            border-radius: 6px 6px 0 0;
+            font-size: 14px;
+            font-weight: 600;
+            color: #555555;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .tab-btn:hover {
+            background-color: #f8f8f8;
+            color: #0d0d0d;
+        }
+        .tab-btn.active {
+            background-color: #0d0d0d;
+            color: #d4a017;
+            border-color: #0d0d0d;
+            border-bottom: 3px solid #d4a017;
+        }
+
+        /* CONTENT SECTIONS */
+        .category-content {
+            display: none;
+        }
+        .category-content.active {
+            display: block;
+        }
+
+        .section-header {
+            margin-bottom: 20px;
+        }
+        .section-header h2 {
+            font-size: 20px;
+            color: #0d0d0d;
+            border-left: 4px solid #d4a017;
+            padding-left: 10px;
+        }
+
+        /* MODULE GRID & CARDS */
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .module-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .module-card h3 {
+            font-size: 16px;
+            color: #0d0d0d;
+            margin-bottom: 8px;
+        }
+        .module-card p {
+            font-size: 13px;
+            color: #666666;
+            margin-bottom: 15px;
+        }
+        .module-card .card-meta {
+            font-size: 12px;
+            color: #888888;
+            margin-bottom: 15px;
+            padding-top: 10px;
+            border-top: 1px dashed #eee;
+        }
+        .btn-start {
+            display: block;
+            text-align: center;
+            background-color: #0d0d0d;
+            color: #d4a017;
+            border: 1px solid #d4a017;
+            padding: 10px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        .btn-start:hover {
+            background-color: #d4a017;
+            color: #0d0d0d;
+        }
+
+        /* EMPTY STATE / COMING SOON */
+        .coming-soon {
+            background-color: #ffffff;
+            border: 1px dashed #ccc;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            color: #777777;
+        }
+
+        /* FOOTER */
+        footer {
+            background-color: #0d0d0d;
+            color: #aaaaaa;
+            text-align: center;
+            padding: 20px 5%;
+            font-size: 13px;
+            border-top: 3px solid #d4a017;
+            margin-top: auto;
+        }
+        footer strong {
+            color: #d4a017;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER HITAM & GOLD -->
+    <header>
+        <div class="header-container">
+            <div class="brand-logo">
+                <h1>BIMBEL CERDAS <span>NTB</span></h1>
+                <p>Portal Utama Simulasi Ujian & Tes Seleksi CAT</p>
+            </div>
+            <div class="header-badge">
+                PORTAL RESMI SIMULASI
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main>
+        <!-- MENU TABS KATEGORI -->
+        <div class="category-tabs">
+            <button class="tab-btn active" onclick="openCategory(event, 'matematika')">MATEMATIKA</button>
+            <button class="tab-btn" onclick="openCategory(event, 'twk')">TWK</button>
+            <button class="tab-btn" onclick="openCategory(event, 'binggris')">B. INGGRIS</button>
+            <button class="tab-btn" onclick="openCategory(event, 'bindonesia')">B. INDONESIA</button>
+            <button class="tab-btn" onclick="openCategory(event, 'pu')">PENGETAHUAN UMUM</button>
+        </div>
+
+        <!-- TAB 1: MATEMATIKA -->
+        <div id="matematika" class="category-content active">
+            <div class="section-header">
+                <h2>Kategori: Matematika Berpola</h2>
+            </div>
+            <div class="module-grid">
+                <!-- Seri 1 -->
+                <div class="module-card">
+                    <div>
+                        <h3>Logika Matematika Berpola - Seri 1</h3>
+                        <p>Simulasi 50 Soal Penalaran Numerik Berpola Geometris & Aritmetika Berjenjang.</p>
+                    </div>
+                    <div>
+                        <div class="card-meta">Jumlah: 50 Soal | Durasi: 60 Menit</div>
+                        <a href="matematika/cat_logika_matematika_berpola.html" class="btn-start">Mulai Ujian Seri 1</a>
+                    </div>
+                </div>
+
+                <!-- Seri 2 -->
+                <div class="module-card">
+                    <div>
+                        <h3>Logika Matematika Berpola - Seri 2</h3>
+                        <p>Simulasi 50 Soal BARU Penalaran Numerik Berpola Geometris & Aritmetika.</p>
+                    </div>
+                    <div>
+                        <div class="card-meta">Jumlah: 50 Soal | Durasi: 60 Menit</div>
+                        <a href="matematika/cat_logika_matematika_berpola_2.html" class="btn-start">Mulai Ujian Seri 2</a>
+                    </div>
+                </div>
+
+                <!-- Seri 3 -->
+                <div class="module-card">
+                    <div>
+                        <h3>Logika Matematika Berpola - Seri 3</h3>
+                        <p>Simulasi Soal Matriks Angka Berpola dalam Format Tabel Baris & Kolom.</p>
+                    </div>
+                    <div>
+                        <div class="card-meta">Jumlah: 50 Soal | Durasi: 60 Menit</div>
+                        <a href="matematika/cat_logika_matematika_berpola_3.html" class="btn-start">Mulai Ujian Seri 3</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: TWK -->
+        <div id="twk" class="category-content">
+            <div class="section-header">
+                <h2>Kategori: Tes Wawasan Kebangsaan (TWK)</h2>
+            </div>
+            <div class="coming-soon">
+                <p>Modul soal TWK sedang dalam persiapan. Silakan pilih kategori lain.</p>
+            </div>
+        </div>
+
+        <!-- TAB 3: B. INGGRIS -->
+        <div id="binggris" class="category-content">
+            <div class="section-header">
+                <h2>Kategori: Bahasa Inggris</h2>
+            </div>
+            <div class="coming-soon">
+                <p>Modul soal Bahasa Inggris sedang dalam persiapan. Silakan pilih kategori lain.</p>
+            </div>
+        </div>
+
+        <!-- TAB 4: B. INDONESIA -->
+        <div id="bindonesia" class="category-content">
+            <div class="section-header">
+                <h2>Kategori: Bahasa Indonesia</h2>
+            </div>
+            <div class="coming-soon">
+                <p>Modul soal Bahasa Indonesia sedang dalam persiapan. Silakan pilih kategori lain.</p>
+            </div>
+        </div>
+
+        <!-- TAB 5: PENGETAHUAN UMUM -->
+        <div id="pu" class="category-content">
+            <div class="section-header">
+                <h2>Kategori: Pengetahuan Umum</h2>
+            </div>
+            <div class="coming-soon">
+                <p>Modul soal Pengetahuan Umum sedang dalam persiapan. Silakan pilih kategori lain.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>BIMBEL CERDAS NTB &copy; 2026</p>
+        <p style="margin-top: 5px; font-size: 12px;">Dibuat oleh <strong>PERSONA RESEARCH & CONSULTING</strong> </p>
+    </footer>
+
+    <!-- SCRIPT TAB NAVIGASI -->
+    <script>
+        function openCategory(evt, categoryName) {
+            var i, categoryContent, tabBtn;
+            
+            categoryContent = document.getElementsByClassName("category-content");
+            for (i = 0; i < categoryContent.length; i++) {
+                categoryContent[i].classList.remove("active");
+            }
+            
+            tabBtn = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tabBtn.length; i++) {
+                tabBtn[i].classList.remove("active");
+            }
+            
+            document.getElementById(categoryName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+    </script>
+</body>
+</html>
