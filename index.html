@@ -81,6 +81,9 @@
             padding-bottom: 5px;
         }
         .tab-btn {
+            position: relative;
+            z-index: 2;
+            pointer-events: auto;
             background-color: #ffffff;
             border: 1px solid #dcdcdc;
             padding: 10px 18px;
@@ -108,6 +111,10 @@
         }
         .category-content.active {
             display: block;
+        }
+        .category-tabs,
+        .category-tabs * {
+            pointer-events: auto;
         }
 
         .section-header {
@@ -154,6 +161,9 @@
             border-top: 1px dashed #eee;
         }
         .btn-start {
+            position: relative;
+            z-index: 2;
+            pointer-events: auto;
             display: block;
             text-align: center;
             background-color: #0d0d0d;
@@ -215,11 +225,11 @@
     <main>
         <!-- MENU TABS KATEGORI -->
         <div class="category-tabs">
-            <button class="tab-btn active" onclick="openCategory(event, 'matematika')">MATEMATIKA</button>
-            <button class="tab-btn" onclick="openCategory(event, 'twk')">TWK</button>
-            <button class="tab-btn" onclick="openCategory(event, 'binggris')">B. INGGRIS</button>
-            <button class="tab-btn" onclick="openCategory(event, 'bindonesia')">B. INDONESIA</button>
-            <button class="tab-btn" onclick="openCategory(event, 'pu')">PENGETAHUAN UMUM</button>
+            <button type="button" class="tab-btn active" data-category="matematika" aria-controls="matematika" aria-selected="true" onclick="openCategory(event, 'matematika')">MATEMATIKA</button>
+            <button type="button" class="tab-btn" data-category="twk" aria-controls="twk" aria-selected="false" onclick="openCategory(event, 'twk')">TWK</button>
+            <button type="button" class="tab-btn" data-category="binggris" aria-controls="binggris" aria-selected="false" onclick="openCategory(event, 'binggris')">B. INGGRIS</button>
+            <button type="button" class="tab-btn" data-category="bindonesia" aria-controls="bindonesia" aria-selected="false" onclick="openCategory(event, 'bindonesia')">B. INDONESIA</button>
+            <button type="button" class="tab-btn" data-category="pu" aria-controls="pu" aria-selected="false" onclick="openCategory(event, 'pu')">PENGETAHUAN UMUM</button>
         </div>
 
         <!-- TAB 1: MATEMATIKA -->
@@ -313,24 +323,54 @@
         <p style="margin-top: 5px; font-size: 12px;">Dibuat oleh <strong>PERSONA RESEARCH & CONSULTING</strong> </p>
     </footer>
 
-    <!-- SCRIPT TAB NAVIGASI -->
+    <!-- SCRIPT TAB NAVIGASI: DIPERKUAT AGAR SEMUA TAB DAPAT DIKLIK -->
     <script>
         function openCategory(evt, categoryName) {
-            var i, categoryContent, tabBtn;
-            
-            categoryContent = document.getElementsByClassName("category-content");
-            for (i = 0; i < categoryContent.length; i++) {
-                categoryContent[i].classList.remove("active");
+            var categoryContent = document.querySelectorAll(".category-content");
+            var tabBtn = document.querySelectorAll(".tab-btn");
+            var target = document.getElementById(categoryName);
+
+            if (!target) {
+                console.error("Kategori tidak ditemukan:", categoryName);
+                return;
             }
-            
-            tabBtn = document.getElementsByClassName("tab-btn");
-            for (i = 0; i < tabBtn.length; i++) {
-                tabBtn[i].classList.remove("active");
+
+            categoryContent.forEach(function (section) {
+                section.classList.remove("active");
+                section.setAttribute("aria-hidden", "true");
+            });
+
+            tabBtn.forEach(function (button) {
+                button.classList.remove("active");
+                button.setAttribute("aria-selected", "false");
+            });
+
+            target.classList.add("active");
+            target.setAttribute("aria-hidden", "false");
+
+            var clickedButton = evt && (evt.currentTarget || evt.target);
+            if (clickedButton && clickedButton.classList.contains("tab-btn")) {
+                clickedButton.classList.add("active");
+                clickedButton.setAttribute("aria-selected", "true");
+            } else {
+                var matchingButton = document.querySelector('.tab-btn[data-category="' + categoryName + '"]');
+                if (matchingButton) {
+                    matchingButton.classList.add("active");
+                    matchingButton.setAttribute("aria-selected", "true");
+                }
             }
-            
-            document.getElementById(categoryName).classList.add("active");
-            evt.currentTarget.classList.add("active");
         }
+
+        // Pastikan status awal panel kategori konsisten saat halaman dimuat.
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".category-content").forEach(function (section) {
+                section.setAttribute("aria-hidden", section.classList.contains("active") ? "false" : "true");
+            });
+
+            document.querySelectorAll(".tab-btn").forEach(function (button) {
+                button.setAttribute("aria-selected", button.classList.contains("active") ? "true" : "false");
+            });
+        });
     </script>
 </body>
 </html>
