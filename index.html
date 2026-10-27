@@ -204,9 +204,47 @@
         footer strong {
             color: #d4a017;
         }
+
+        /* GERBANG AKSES AKADEMIK — tidak mengubah tampilan halaman setelah login */
+        #prcAcademicGate {
+            position: fixed; inset: 0; z-index: 99999;
+            display: none; align-items: center; justify-content: center;
+            padding: 22px; background: rgba(13, 13, 13, .94);
+        }
+        #prcAcademicGate .gate-card {
+            width: 100%; max-width: 420px; padding: 30px 26px;
+            border-radius: 14px; background: #fff; color: #222;
+            box-shadow: 0 18px 55px rgba(0,0,0,.35); text-align: center;
+        }
+        #prcAcademicGate h2 { margin: 0 0 8px; color: #111; font-size: 22px; }
+        #prcAcademicGate p { margin: 0 0 18px; color: #555; font-size: 14px; }
+        #prcAcademicPassword {
+            display: block; width: 100%; padding: 13px 14px; margin: 0 0 12px;
+            border: 1px solid #c9c9c9; border-radius: 8px; font-size: 16px;
+        }
+        #prcAcademicSubmit {
+            width: 100%; border: 0; border-radius: 8px; padding: 13px 16px;
+            background: #d4a017; color: #111; font-size: 15px; font-weight: 700; cursor: pointer;
+        }
+        #prcAcademicError { display: none; margin-top: 12px; color: #b42318; font-size: 13px; }
+        #prcAcademicGate .gate-note { margin-top: 14px; font-size: 11px; color: #777; }
     </style>
 </head>
 <body>
+
+    <div id="prcAcademicGate" role="dialog" aria-modal="true" aria-labelledby="prcAcademicTitle">
+        <div class="gate-card">
+            <h2 id="prcAcademicTitle">AKSES AKADEMIK PRC CLASS</h2>
+            <p>Masukkan kata sandi peserta untuk membuka portal simulasi CAT.</p>
+            <form id="prcAcademicForm">
+                <input id="prcAcademicPassword" type="password" autocomplete="current-password" placeholder="Kata sandi peserta" required>
+                <button id="prcAcademicSubmit" type="submit">MASUK KE AKADEMIK</button>
+            </form>
+            <div id="prcAcademicError" role="alert">Kata sandi tidak sesuai. Silakan coba lagi.</div>
+            <div class="gate-note">Gunakan kata sandi Persona Class yang diberikan kepada peserta.</div>
+        </div>
+    </div>
+
 
     <!-- HEADER HITAM & GOLD -->
     <header>
@@ -325,6 +363,53 @@
 
     <!-- SCRIPT TAB NAVIGASI: DIPERKUAT AGAR SEMUA TAB DAPAT DIKLIK -->
     <script>
+
+        /* Pemeriksaan akses Akademik. Sesi berlaku 8 jam pada peramban yang sama. */
+        (function () {
+            const AUTH_KEY = 'prcClassAuthUntil';
+            const gate = document.getElementById('prcAcademicGate');
+            const form = document.getElementById('prcAcademicForm');
+            const passwordField = document.getElementById('prcAcademicPassword');
+            const error = document.getElementById('prcAcademicError');
+            const academicPasswords = [
+                'PRC00','BAGAS11','ILHAM0801','CANDRA17','EGA12','AGUS25','YANDHETA1','DIKA2408','dika24','zihan2008','PRC10',
+                'rendy2005','FATHIR06','GALUH23','DOMI22','FITRA07122007','JUAN020708@','DIDIT010908','GALANGADR','0901','710211',
+                'IMAMARYARR','@HUDA02','JEPEH123','alfiannn','290608','ipan2007','FEBRY12','PRC28','PRC29','PRC30',
+                'PRC31','PRC32','PRC33','PRC34','PRC35','PRC36','PRC37','PRC38','PRC39','PRC40',
+                'PRC41','PRC42','PRC43','PRC44','PRC45','PRC46','PRC47','PRC48','PRC49','PRC50',
+                'PRC51','PRC52','PRC53','PRC54','PRC55','PRC56','PRC57','PRC58','PRC59','PRC60',
+                'PRC61','PRC62','PRC63','PRC64','PRC65','PRC66','PRC67','PRC68','PRC69','PRC70',
+                'PRC71','PRC72','PRC73','PRC74','PRC75','PRC76','PRC77','PRC78','PRC79','PRC80',
+                'PRC81','PRC82','PRC83','PRC84','PRC85','PRC86','PRC87','PRC88','PRC89','PRC90',
+                'PRC91','PRC92','PRC93','PRC94','PRC95','PRC96','PRC97','PRC98','PRC99','PRC100','PRC101'
+            ];
+            function hasValidSession() {
+                try { return Number(localStorage.getItem(AUTH_KEY) || 0) > Date.now(); }
+                catch (e) { return false; }
+            }
+            function grantSession() {
+                try { localStorage.setItem(AUTH_KEY, String(Date.now() + 8 * 60 * 60 * 1000)); } catch (e) {}
+            }
+            if (!hasValidSession()) {
+                gate.style.display = 'flex';
+                document.documentElement.style.overflow = 'hidden';
+            }
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+                const entered = passwordField.value.trim().toLowerCase();
+                const valid = academicPasswords.some(function (saved) { return saved.toLowerCase() === entered; });
+                if (!valid) {
+                    error.style.display = 'block';
+                    passwordField.select();
+                    return;
+                }
+                grantSession();
+                error.style.display = 'none';
+                gate.style.display = 'none';
+                document.documentElement.style.overflow = '';
+            });
+        })();
+
         function openCategory(evt, categoryName) {
             var categoryContent = document.querySelectorAll(".category-content");
             var tabBtn = document.querySelectorAll(".tab-btn");
